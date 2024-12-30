@@ -1,0 +1,6 @@
+@font-face {
+    font-family: 'Font2';  /* Vous pouvez changer ce nom */
+    src: url('./font2.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
