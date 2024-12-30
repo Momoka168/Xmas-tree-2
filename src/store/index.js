@@ -38,7 +38,7 @@ export default createStore({
           'Moyen': '150-200cm',
           'Grand': '200-250cm'
         },
-        image: '/src/assets/images/Sapins/Sapin2RUDOLPHE.jpg',
+        image: '/images/Sapins/Sapin2RUDOLPHE.jpg',
         inStock: true,
         category: 'Premium'
       },
@@ -56,7 +56,7 @@ export default createStore({
           'Moyen': '150-200cm',
           'Grand': '200-250cm'
         },
-        image: '/src/assets/images/Sapins/Sapin3GABI.jpg',
+        image: '/images/Sapins/Sapin3GABI.jpg',
         inStock: true,
         category: 'Nordic'
       },
@@ -74,7 +74,7 @@ export default createStore({
           'Moyen': '150-200cm',
           'Grand': '200-250cm'
         },
-        image: '/src/assets/images/Sapins/Sapin4.jpg',
+        image: '/images/Sapins/Sapin4.jpg',
         inStock: true,
         category: 'Classique'
       },
@@ -92,7 +92,7 @@ export default createStore({
           'Moyen': '150-200cm',
           'Grand': '200-250cm'
         },
-        image: '/src/assets/images/Sapins/Sapin4LUTIN.jpg',
+        image: '/images/Sapins/Sapin4LUTIN.jpg',
         inStock: true,
         category: 'Enneigé'
       },
@@ -110,7 +110,7 @@ export default createStore({
           'Moyen': '150-200cm',
           'Grand': '200-250cm'
         },
-        image: '/src/assets/images/Sapins/Sapin6.jpg',
+        image: '/images/Sapins/Sapin6.jpg',
         inStock: true,
         category: 'Premium'
       },
@@ -128,7 +128,7 @@ export default createStore({
           'Moyen': '150-200cm',
           'Grand': '200-250cm'
         },
-        image: '/src/assets/images/Sapins/Sapin7.jpg',
+        image: '/images/Sapins/Sapin7.jpg',
         inStock: true,
         category: 'Naturel'
       },
@@ -146,7 +146,7 @@ export default createStore({
           'Moyen': '150-200cm',
           'Grand': '200-250cm'
         },
-        image: '/src/assets/images/Sapins/Sapin8.jpg',
+        image: '/images/Sapins/Sapin8.jpg',
         inStock: true,
         category: 'Nordic'
       },
@@ -164,7 +164,7 @@ export default createStore({
           'Moyen': '150-200cm',
           'Grand': '200-250cm'
         },
-        image: '/src/assets/images/Sapins/Sapin9.webp',
+        image: '/images/Sapins/Sapin9.webp',
         inStock: true,
         category: 'Premium'
       },
@@ -182,7 +182,7 @@ export default createStore({
           'Moyen': '150-200cm',
           'Grand': '200-250cm'
         },
-        image: '/src/assets/images/Sapins/Sapin10.jpg',
+        image: '/images/Sapins/Sapin10.jpg',
         inStock: true,
         category: 'Premium'
       }

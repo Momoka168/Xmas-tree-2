@@ -35,15 +35,15 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const slides = ref([
-  { id: 1, image: '/src/assets/images/home/Home1.webp' },
-  { id: 2, image: '/src/assets/images/home/Home2.webp' },
-  { id: 3, image: '/src/assets/images/home/Home3.jpg' },
-  { id: 4, image: '/src/assets/images/home/Home4.webp' },
-  { id: 5, image: '/src/assets/images/home/Home5.webp' },
-  { id: 6, image: '/src/assets/images/home/Home7.webp' },
-  { id: 7, image: '/src/assets/images/home/Home8.webp' },
-  { id: 8, image: '/src/assets/images/home/Home9.webp' },
-  { id: 9, image: '/src/assets/images/home/Home10.webp' }
+  { id: 1, image: '/images/home/Home1.webp' },
+  { id: 2, image: '/images/home/Home2.webp' },
+  { id: 3, image: '/images/home/Home3.jpg' },
+  { id: 4, image: '/images/home/Home4.webp' },
+  { id: 5, image: '/images/home/Home5.webp' },
+  { id: 6, image: '/images/home/Home7.webp' },
+  { id: 7, image: '/images/home/Home8.webp' },
+  { id: 8, image: '/images/home/Home9.webp' },
+  { id: 9, image: '/images/home/Home10.webp' }
 ])
 
 const currentSlide = ref(0)

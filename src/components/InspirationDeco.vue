@@ -16,22 +16,22 @@
  <script setup>
  const inspirationImages = [
   {
-    src: '/src/assets/images/idea/idea1.webp',
+    src: '/images/idea/idea1.webp',
     alt: 'Sapin traditionnel avec casse-noisettes',
     description: 'Traditionnel & Casse-noisettes'
   },
   {
-    src: '/src/assets/images/idea/idea2.webp',
+    src: '/images/idea/idea2.webp',
     alt: 'Sapin élégant blanc et or',
     description: 'Élégance Monochrome'
   },
   {
-    src: '/src/assets/images/idea/idea3.webp',
+    src: '/images/idea/idea3.webp',
     alt: 'Sapin pastel avec ornements blancs',
     description: 'Douceur Givrée'
   },
   {
-    src: '/src/assets/images/idea/idea5.webp',
+    src: '/images/idea/idea5.webp',
     alt: 'Sapin scandinave minimaliste',
     description: 'Charme Scandinave'
   }

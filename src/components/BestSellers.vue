@@ -41,7 +41,7 @@ const bestsellers = ref([
       medium: 351.10,
       large: 451.10
     },
-    image: '/src/assets/images/Sapins/Sapin4.jpg',
+    image: '/images/Sapins/Sapin4.jpg',
     description: 'Sapin artificiel premium avec branches ultra-réalistes'
   },
   {
@@ -52,7 +52,7 @@ const bestsellers = ref([
       medium: 399.90,
       large: 499.90
     },
-    image: '/src/assets/images/Sapins/Sapin8.jpg',
+    image: '/images/Sapins/Sapin8.jpg',
     description: 'Sapin haut de gamme au feuillage dense'
   },
   {
@@ -63,7 +63,7 @@ const bestsellers = ref([
       medium: 378.10,
       large: 478.10
     },
-    image: '/src/assets/images/Sapins/Sapin12.jpg',
+    image: '/images/Sapins/Sapin12.jpg',
     description: 'Sapin élégant au style traditionnel'
   },
   {
@@ -74,7 +74,7 @@ const bestsellers = ref([
       medium: 378.10,
       large: 494.10  
     },
-    image: '/src/assets/images/Sapins/Sapin3GABI.jpg',
+    image: '/images/Sapins/Sapin3GABI.jpg',
     description: 'Sapin majestueux au design épuré'
   }
 ])
