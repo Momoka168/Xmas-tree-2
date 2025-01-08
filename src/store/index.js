@@ -20,7 +20,6 @@ export default createStore({
           'Grand': '200-250cm'
         },
         image: '/images/Sapins/Sapin1LOLA.jpg',
-        discount: '-10%',
         inStock: true,
         category: 'Premium'
       },

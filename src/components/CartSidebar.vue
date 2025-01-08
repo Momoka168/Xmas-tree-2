@@ -1,14 +1,6 @@
 <template>
-  <div 
-    class="cart-sidebar-overlay" 
-    v-if="isOpen"
-    @click="handleOverlayClick"
-  >
-    <div 
-      class="cart-sidebar" 
-      :class="{ 'is-open': isOpen }"
-      @click.stop
-    >
+  <div class="cart-sidebar-overlay" v-if="isOpen" @click="handleOverlayClick">
+    <div class="cart-sidebar" :class="{ 'is-open': isOpen }" @click.stop>
       <div class="cart-header">
         <h2>Panier</h2>
         <button class="close-btn" @click="$emit('close')">
@@ -24,20 +16,21 @@
           <div class="cart-item-content">
             <div class="cart-item-header">
               <h3>{{ item.name }}</h3>
-              <button class="delete-btn" @click="removeFromCart(item.id, item.selectedSize)">
+              <button class="delete-btn" @click="handleRemoveFromCart(item.id, item.selectedSize)">
                 <i class="fas fa-trash"></i>
               </button>
             </div>
             
             <div class="cart-item-details">
-              <div class="size-selector">
-                <label>Taille :</label>
-                <div class="selected-size">
+              <div class="size-section">
+                <p>Taille :</p>
+                <button 
+                  class="edit-size-btn" 
+                  @click="openSizeModal(item)"
+                >
                   {{ item.sizes[item.selectedSize] }}
-                  <button class="edit-btn" @click="openSizeModal(item)">
-                    <i class="fas fa-pen"></i>
-                  </button>
-                </div>
+                  <i class="fas fa-pen"></i>
+                </button>
               </div>
  
               <div class="quantity-controls">
@@ -46,7 +39,7 @@
                   :disabled="item.quantity <= 1"
                   class="quantity-btn"
                 >-</button>
-
+ 
                 <span class="quantity">{{ item.quantity }}</span>
                 
                 <button 
@@ -58,16 +51,19 @@
  
               <div class="price-info">
                 <div class="unit-price">
-                  <span>Prix unitaire :</span>
+                  <span>Prix :</span>
                   <span class="price">{{ item.prices[item.selectedSize] }}€</span>
-                </div>
-                <div class="subtotal">
-                  <span>Sous-total :</span>
-                  <span class="price">{{ item.prices[item.selectedSize] * item.quantity }}€</span>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+ 
+        <div class="shipping-info" v-if="cartTotal < 300">
+          <p>Plus que {{ 300 - cartTotal }}€ pour la livraison gratuite</p>
+        </div>
+        <div class="shipping-info success" v-else>
+          <p>Livraison gratuite !</p>
         </div>
  
         <div class="cart-footer">
@@ -94,7 +90,6 @@
         </button>
       </div>
  
-      <!-- Modal pour changer la taille -->
       <div v-if="showSizeModal" class="size-modal">
         <div class="modal-content">
           <h3>Choisir une nouvelle taille</h3>
@@ -132,9 +127,8 @@
  const store = useStore()
  const router = useRouter()
  const { removeFromCart, updateCartQuantity } = useCart()
-
  
-const updateQuantity = (id, selectedSize, newQuantity) => {
+ const updateQuantity = (id, selectedSize, newQuantity) => {
   if (newQuantity >= 1 && newQuantity <= 10) {
     store.dispatch('updateCartQuantity', {
       id,
@@ -142,7 +136,11 @@ const updateQuantity = (id, selectedSize, newQuantity) => {
       quantity: newQuantity
     })
   }
-}
+ }
+ 
+ const handleRemoveFromCart = (id, selectedSize) => {
+  removeFromCart({ id, selectedSize })
+ }
  
  const showSizeModal = ref(false)
  const selectedItem = ref(null)
@@ -159,13 +157,12 @@ const updateQuantity = (id, selectedSize, newQuantity) => {
   emit('close')
   router.push({
     name: 'checkout',
-    params: { 
-      // Si besoin de passer des params
+    params: {
       cartTotal: cartTotal.value,
       items: cartItems.value
     }
   })
-}
+ }
  
  const openSizeModal = (item) => {
   selectedItem.value = item
@@ -269,10 +266,10 @@ const updateQuantity = (id, selectedSize, newQuantity) => {
  .cart-item {
   display: flex;
   gap: 1.5rem;
-  padding: 1.5rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  background: #f8f8f8;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 1.25rem;
   margin-bottom: 1rem;
  }
  
@@ -324,33 +321,33 @@ const updateQuantity = (id, selectedSize, newQuantity) => {
   gap: 1rem;
  }
  
- .size-selector, .quantity-selector {
+ .size-section {
   display: flex;
-  align-items: center;
-  gap: 1rem;
- }
- 
- .selected-size {
-  display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+ }
+ 
+ .edit-size-btn {
+  padding: 0.75rem;
   background: #f5f5f5;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  font-weight: 500;
- }
- 
- .edit-btn {
-  background: none;
-  border: none;
-  color: #666;
   cursor: pointer;
-  padding: 0.25rem;
-  transition: color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  width: 100%;
  }
  
- .edit-btn:hover {
-  color: #333;
+ .edit-size-btn:hover {
+  background: #e0e0e0;
+ }
+ 
+ .edit-size-btn i {
+  color: #666;
+  font-size: 0.9em;
  }
  
  .quantity-controls {
@@ -359,6 +356,7 @@ const updateQuantity = (id, selectedSize, newQuantity) => {
   border: 1px solid #ddd;
   border-radius: 4px;
   overflow: hidden;
+  width: fit-content;
  }
  
  .quantity-btn {
@@ -378,42 +376,39 @@ const updateQuantity = (id, selectedSize, newQuantity) => {
   cursor: not-allowed;
  }
  
- .quantity-input {
-  width: 50px;
-  text-align: center;
-  border: none;
+ .quantity {
+  padding: 0.5rem 1rem;
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;
-  padding: 0.5rem;
-  -moz-appearance: textfield;
- }
- 
- .quantity-input::-webkit-outer-spin-button,
- .quantity-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
  }
  
  .price-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  background: white;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-top: 1rem;
  }
  
- .unit-price, .subtotal {
+ .unit-price {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #0B3B24;
   display: flex;
   justify-content: space-between;
   align-items: center;
  }
  
- .subtotal {
-  font-weight: 600;
-  color: #0B3B24;
+ .shipping-info {
+  padding: 1rem;
+  background: #f5f5f5;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  text-align: center;
  }
  
- .price {
-  font-size: 1.1rem;
+ .shipping-info.success {
+  background: #e6f4ea;
+  color: #0B3B24;
  }
  
  .cart-footer {
@@ -558,60 +553,77 @@ const updateQuantity = (id, selectedSize, newQuantity) => {
  
   .cart-item {
     flex-direction: column;
+    align-items: center;
   }
  
   .cart-item-image {
     width: 100%;
+    max-width: 300px;
     height: 200px;
   }
  
-  .size-selector, .quantity-selector {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
+  .size-selector {
+   flex-direction: column;
+   align-items: flex-start;
+   gap: 0.5rem;
+ }
+
+ .modal-content {
+   margin: 1rem;
+   width: calc(100% - 2rem);
+ }
  
-  .modal-content {
-    margin: 1rem;
-    width: calc(100% - 2rem);
-  }
-  
-  .cart-header h2 {
-    font-size: 1.25rem;
-  }
-  
-  .cart-total {
-    font-size: 1.1rem;
-  }
-  
-  .cart-actions {
-    gap: 0.75rem;
-  }
-  
-  .checkout-btn, .continue-btn {
-    padding: 0.875rem;
-  }
+ .cart-header h2 {
+   font-size: 1.25rem;
+ }
+
+ .cart-total {
+   font-size: 1.1rem;
+ }
+
+ .cart-actions {
+   gap: 0.75rem;
+ }
+
+ .checkout-btn, .continue-btn {
+   padding: 0.875rem;
+ }
 }
 
 @media (max-width: 480px) {
-  .cart-header {
-    padding: 1rem;
-  }
-  
-  .cart-content {
-    padding: 1rem;
-  }
-  
-  .cart-item {
-    padding: 1rem;
-  }
-  
-  .cart-item-image {
-    height: 160px;
-  }
-  
-  .cart-footer {
-    padding: 1rem;
-  }
+ .cart-header {
+   padding: 1rem;
+ }
+
+ .cart-content {
+   padding: 1rem;
+ }
+
+ .cart-item {
+   padding: 1rem;
+ }
+
+ .cart-item-image {
+   height: 160px;
+ }
+
+ .cart-footer {
+   padding: 1rem;
+ }
+
+ .size-buttons {
+   flex-direction: column;
+   width: 100%;
+ }
+
+ .size-buttons button {
+   width: 100%;
+   text-align: center;
+ }
+
+ .quantity-controls {
+   width: 100%;
+   justify-content: space-between;
+ }
 }
 </style>

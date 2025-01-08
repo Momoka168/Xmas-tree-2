@@ -7,7 +7,7 @@
       <div v-for="product in bestsellers" 
            :key="product.id" 
            class="product-card">
-        <div class="product-image">
+        <div class="product-image" @click="goToProductDetails(product.id)">
           <img :src="product.image" :alt="product.name">
         </div>
         <div class="product-info">
@@ -24,15 +24,15 @@
       </div>
     </div>
   </section>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-const bestsellers = ref([
+ </template>
+ 
+ <script setup>
+ import { ref } from 'vue'
+ import { useRouter } from 'vue-router'
+ 
+ const router = useRouter()
+ 
+ const bestsellers = ref([
   {
     id: 1,
     name: 'Sapin de Noël Italien',
@@ -77,41 +77,41 @@ const bestsellers = ref([
     image: '/images/Sapins/Sapin3GABI.jpg',
     description: 'Sapin majestueux au design épuré'
   }
-])
-
-const goToProductDetails = (productId) => {
+ ])
+ 
+ const goToProductDetails = (productId) => {
   router.push(`/product/${productId}`)
-}
-</script>
-
-<style scoped>
-.bestsellers {
+ }
+ </script>
+ 
+ <style scoped>
+ .bestsellers {
   padding: 4rem 2rem;
   max-width: 1400px;
   margin: 0 auto;
-}
-
-h2 {
+ }
+ 
+ h2 {
   font-family: 'Font2', sans-serif;
   font-size: 4rem;
   color: #0B3B24;
   text-align: center;
   margin-bottom: 0.5rem;
-}
-
-.subtitle {
+ }
+ 
+ .subtitle {
   text-align: center;
   color: #c41e3a;
   margin-bottom: 3rem;
-}
-
-.products-grid {
+ }
+ 
+ .products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
-}
-
-.product-card {
+ }
+ 
+ .product-card {
   background: #0B3B24;
   border-radius: 8px;
   overflow: hidden;
@@ -121,14 +121,14 @@ h2 {
   height: 100%;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.product-card:hover {
+ }
+ 
+ .product-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.product-image {
+ }
+ 
+ .product-image {
   position: relative;
   height: 300px;
   display: flex;
@@ -136,20 +136,21 @@ h2 {
   justify-content: center;
   padding: 20px;
   background: #fff;
-}
-
-.product-image img {
+  cursor: pointer;
+ }
+ 
+ .product-image img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
   transition: transform 0.3s ease;
-}
-
-.product-card:hover .product-image img {
+ }
+ 
+ .product-card:hover .product-image img {
   transform: scale(1.05);
-}
-
-.product-info {
+ }
+ 
+ .product-info {
   padding: 1.5rem;
   text-align: center;
   display: flex;
@@ -157,29 +158,29 @@ h2 {
   justify-content: space-between;
   flex: 1;
   background: white;
-}
-
-.product-info-content {
+ }
+ 
+ .product-info-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.product-info h4 {
+ }
+ 
+ .product-info h4 {
   margin: 0 0 0.5rem;
   font-size: 1.2rem;
   color: #333;
-}
-
-.price {
+ }
+ 
+ .price {
   font-weight: bold;
   font-size: 1.1rem;
   color: #000000;
   margin: 0.5rem 0 1rem;
-}
-
-.add-to-cart {
+ }
+ 
+ .add-to-cart {
   width: 100%;
   padding: 0.8rem;
   background: #0B3B24;
@@ -193,15 +194,15 @@ h2 {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-size: 0.9rem;
-}
-
-.add-to-cart:hover {
+ }
+ 
+ .add-to-cart:hover {
   background: #c41e3a;
   color: white;
   border: 2px solid #0B3B24;
-}
-
-@media (max-width: 1200px) {
+ }
+ 
+ @media (max-width: 1200px) {
   .products-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -209,23 +210,23 @@ h2 {
   h2 {
     font-size: 3.5rem;
   }
-}
-
-@media (max-width: 992px) {
+ }
+ 
+ @media (max-width: 992px) {
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
+ 
   .product-image {
     height: 220px;
   }
-
+ 
   h2 {
     font-size: 3rem;
   }
-}
-
-@media (max-width: 768px) {
+ }
+ 
+ @media (max-width: 768px) {
   .bestsellers {
     padding: 2rem 1rem;
   }
@@ -233,33 +234,33 @@ h2 {
   h2 {
     font-size: 2.5rem;
   }
-
+ 
   .product-image {
     height: 200px;
   }
-
+ 
   .add-to-cart {
     padding: 0.6rem;
     font-size: 0.9rem;
   }
-
+ 
   .product-info {
     padding: 1rem;
   }
-}
-
-@media (max-width: 576px) {
+ }
+ 
+ @media (max-width: 576px) {
   .products-grid {
     grid-template-columns: 1fr;
   }
-
+ 
   h2 {
     font-size: 2rem;
   }
-
+ 
   .product-card {
     max-width: 350px;
     margin: 0 auto;
   }
-}
-</style>
+ }
+ </style>
