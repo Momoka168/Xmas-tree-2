@@ -27,6 +27,9 @@
               Panier
             </a>
           </li>
+          <li>
+            <router-link to="/contact">Contact</router-link>
+          </li>
         </ul>
       </nav>
     </div>
@@ -65,9 +68,15 @@ export default {
 
 <style scoped>
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   background-color: #f1f1f1;
   border-bottom: 1px solid #eee;
   padding: 1rem 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 1000;
 }
 
 .header-content {
@@ -135,6 +144,11 @@ export default {
   transform: scale(1.1);
 }
 
+/* Il faut ajouter ce style au composant parent pour compenser l'espace de la navbar fixe */
+:deep(main), :deep(.main-content) {
+  padding-top: 132px; 
+}
+
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
@@ -151,6 +165,10 @@ export default {
 
   .favorites-count, .cart-count {
     font-size: 0.75rem;
+  }
+
+  :deep(main), :deep(.main-content) {
+    padding-top: 180px; 
   }
 }
 

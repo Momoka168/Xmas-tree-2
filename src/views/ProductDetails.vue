@@ -145,6 +145,14 @@
 
     <!-- Recommended Products -->
     <ProductRecommended :current-product-id="product?.id" />
+
+    <!-- Notification -->
+    <Transition name="notification">
+      <div v-if="showNotification" class="notification" :class="notification.type">
+        <i class="fas fa-check-circle"></i>
+        <span>{{ notification.message }}</span>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -169,6 +177,11 @@ const selectedSize = ref('Moyen')
 const quantity = ref(1)
 const selectedImageIndex = ref(0)
 const isZoomed = ref(false)
+const showNotification = ref(false)
+const notification = ref({
+  type: '',
+  message: ''
+})
 
 // Simulation de stocks
 const generateRandomStock = () => Math.floor(Math.random() * 5) + 0
@@ -252,11 +265,17 @@ const addToCart = () => {
     // Réinitialiser la quantité
     quantity.value = 1
 
-    // Notification de succès
-    store.dispatch('showNotification', {
+    // Afficher la notification
+    notification.value = {
       type: 'success',
-      message: 'Produit ajouté au panier avec succès!'
-    })
+      message: 'Article ajouté au panier avec succès !'
+    }
+    showNotification.value = true
+
+    // Cacher la notification après 3 secondes
+    setTimeout(() => {
+      showNotification.value = false
+    }, 3000)
   }
 }
 
@@ -265,6 +284,7 @@ onMounted(() => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 })
 </script>
+
 <style scoped>
 .product-details {
   max-width: 1200px;
@@ -534,6 +554,42 @@ summary:hover {
   color: #c41e3a;
   font-size: 0.9rem;
   margin-top: 0.5rem;
+}
+
+/* Notification Styles */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  z-index: 1000;
+}
+
+.notification.success {
+  background: #0B3B24;
+  color: white;
+}
+
+.notification i {
+  font-size: 1.2rem;
+}
+
+/* Animation de la notification */
+.notification-enter-active,
+.notification-leave-active {
+  transition: all 0.3s ease;
+}
+
+.notification-enter-from,
+.notification-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
 }
 
 /* Responsive Design */
