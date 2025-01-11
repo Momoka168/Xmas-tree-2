@@ -15,7 +15,7 @@
             <i class="fas fa-search"></i>
           </button>
         </div>
- 
+ <!-- 4 Filtres par catégorie-->
         <div class="filters">
           <div class="filter-group">
             <label for="category">Catégorie</label>
@@ -28,7 +28,7 @@
               <option value="Naturel">Naturel</option>
             </select>
           </div>
- 
+   <!-- 4 Filtres par prix -->
           <div class="filter-group">
             <label for="sort">Tri</label>
             <select id="sort" v-model="filters.sort">
@@ -107,7 +107,7 @@
               </button>
             </div>
           </div>
- 
+          
           <button class="add-to-cart" 
                   @click="addToCart(product)" 
                   :disabled="!selectedSizes[product.id]">

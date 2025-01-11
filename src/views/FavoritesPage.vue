@@ -1,34 +1,48 @@
 <template>
+  <!-- Container principal de la page favoris -->
   <div class="favorites-page">
     <div class="favorites-container">
       <h1>Mes Favoris</h1>
  
+      <!-- Affichage conditionnel si des produits sont en favoris -->
       <div class="favorites-content" v-if="favoriteProducts.length > 0">
+        <!-- Grille des produits favoris -->
         <div class="products-grid">
+          <!-- Boucle sur chaque produit favori -->
           <div v-for="product in favoriteProducts" 
                :key="product.id" 
                class="product-card">
+            <!-- Image et infos du produit -->
             <div class="product-image">
+              <!-- Badge promotion si applicable -->
               <span v-if="product.discount" class="discount">
                 {{ product.discount }}
               </span>
               <img :src="product.image" :alt="product.name">
             </div>
+
+            <!-- Informations produit -->
             <div class="product-info">
               <h3>{{ product.name }}</h3>
+              <!-- Affichage de la fourchette de prix -->
               <div class="price-info">
                 <span class="price-range">
                   {{ formatPrice(product.prices.Petit) }}€ - {{ formatPrice(product.prices.Grand) }}€
                 </span>
               </div>
+
+              <!-- Boutons d'action -->
               <div class="button-container">
+                <!-- Navigation vers détail produit -->
                 <button class="view-btn" @click="viewProduct(product.id)">
                   Voir le produit
                 </button>
+                <!-- Ouverture modal sélection taille -->
                 <button class="add-btn" @click="openSizeSelector(product)">
                   Ajouter au panier
                 </button>
               </div>
+              <!-- Retrait des favoris -->
               <button class="remove-btn" @click="removeFromFavorites(product.id)">
                 <i class="fas fa-times"></i>
                 Retirer des favoris
@@ -38,6 +52,7 @@
         </div>
       </div>
  
+      <!-- Affichage si aucun favori -->
       <div class="empty-favorites" v-else>
         <i class="far fa-heart empty-icon"></i>
         <h2>Votre liste de favoris est vide</h2>
@@ -47,7 +62,7 @@
         </router-link>
       </div>
  
-      <!-- Modal de sélection de taille -->
+      <!-- Modal de sélection de taille pour ajout au panier -->
       <div class="modal" v-if="showSizeSelector">
         <div class="modal-content">
           <h3>Choisissez la taille :</h3>
@@ -67,37 +82,45 @@
         </div>
       </div>
  
+      <!-- Message de succès ajout panier -->
       <div class="success-message" v-if="showSuccess">
         Article ajouté au panier avec succès !
       </div>
     </div>
   </div>
 </template>
- 
+
 <script setup>
+// Imports nécessaires 
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useFavorites } from '@/composables/useFavorites'
 
+// Initialisation store et router
 const store = useStore()
 const router = useRouter()
 const { toggleFavorite } = useFavorites()
 
-const showSizeSelector = ref(false)
+// État local pour la modal et notifications
+const showSizeSelector = ref(false) 
 const showSuccess = ref(false)
 const selectedProduct = ref(null)
 
+// Récupération des produits favoris depuis le store
 const favoriteProducts = computed(() => store.getters.favoriteProducts)
 
+// Formatage des prix
 const formatPrice = (price) => {
   return parseFloat(price).toFixed(2)
 }
 
+// Navigation vers détail produit
 const viewProduct = (productId) => {
   router.push(`/product/${productId}`)
 }
 
+// Gestion de la modal de sélection taille
 const openSizeSelector = (product) => {
   selectedProduct.value = product
   showSizeSelector.value = true
@@ -108,6 +131,7 @@ const closeSizeSelector = () => {
   selectedProduct.value = null
 }
 
+// Ajout au panier avec taille sélectionnée
 const selectSize = (size, price) => {
   store.dispatch('addToCart', {
     product: selectedProduct.value,
@@ -118,11 +142,13 @@ const selectSize = (size, price) => {
   closeSizeSelector()
   showSuccess.value = true
   
+  // Masquer notification après délai
   setTimeout(() => {
     showSuccess.value = false
   }, 3000)
 }
 
+// Retrait des favoris
 const removeFromFavorites = (productId) => {
   store.dispatch('toggleFavoriteWithSize', {
     productId: productId,

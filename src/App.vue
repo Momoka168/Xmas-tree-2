@@ -1,3 +1,9 @@
+<!-- App.vue -->
+<!--
+* Composant racine de l'application
+* Gère la structure globale avec navbar, contenu principal et panier
+-->
+
 <template>
   <div id="app">
     <NavBar @open-cart="openCart" />

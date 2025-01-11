@@ -183,7 +183,7 @@ const notification = ref({
   message: ''
 })
 
-// Simulation de stocks
+// Génération aléatoire de stocks pour simulation
 const generateRandomStock = () => Math.floor(Math.random() * 5) + 0
 
 const stocksParTaille = ref({
@@ -192,7 +192,7 @@ const stocksParTaille = ref({
   'Grand': generateRandomStock()
 })
 
-// Computed properties
+// Computed pour obtenir le stock disponible pour la taille sélectionnée
 const stockDisponible = computed(() => stocksParTaille.value[selectedSize.value])
 
 const product = computed(() => 
@@ -241,18 +241,20 @@ const incrementQuantity = () => {
     quantity.value++
   }
 }
-
+// Validation de la quantité selon le stock
 const validateQuantity = () => {
   let value = parseInt(quantity.value)
   if (isNaN(value) || value < 1) {
     quantity.value = 1
   } else if (value > stockDisponible.value) {
-    quantity.value = stockDisponible.value
+    quantity.value = stockDisponible.value // Limite à la quantité disponible
+
   }
 }
 
 const addToCart = () => {
   if (product.value && selectedSize.value && quantity.value <= stockDisponible.value) {
+        // Ajout au panier
     store.dispatch('addToCart', {
       product: product.value,
       selectedSize: selectedSize.value,

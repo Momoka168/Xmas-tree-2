@@ -16,6 +16,9 @@
           <li>
             <router-link to="/favorites" class="favorites-link">
               <i class="far fa-heart"></i>
+
+              <!-- 1 Compteur de favoris et panier en temps réel -->
+              
               <span v-if="favoritesCount > 0" class="favorites-count">{{ favoritesCount }}</span>
               Favoris
             </router-link>

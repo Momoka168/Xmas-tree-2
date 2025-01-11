@@ -11,6 +11,7 @@
       </div>
       <div class="footer-column">
         <h3>NOUS CONTACTER</h3>
+        
         <div class="contact-list">
           <a href="mailto:xmastore@hohoho.com" class="contact-item">
             <i class="fas fa-envelope"></i>

@@ -2,6 +2,8 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
+       // Panier et favoris avec persistance localStorage
+
     cart: JSON.parse(localStorage.getItem('cart')) || [],
     favorites: JSON.parse(localStorage.getItem('favorites')) || [],
     products: [
@@ -186,6 +188,7 @@ export default createStore({
         category: 'Premium'
       }
     ],
+    // Filtres du catalogue
     filters: {
       price: null,
       size: null,
@@ -194,16 +197,22 @@ export default createStore({
     }
   },
 
+ // Getters pour accéder aux données calculées
   getters: {
+
+    // Calcul du total du panier
     cartTotal: (state) => {
       return parseFloat(state.cart.reduce((total, item) => {
         return total + (item.prices[item.selectedSize] * item.quantity)
       }, 0)).toFixed(2)
     },
 
+// Nombre total d'articles dans le panier
     cartCount: (state) => {
       return state.cart.reduce((count, item) => count + item.quantity, 0)
     },
+
+   // Articles du panier avec sous-totaux calculés
 
     cartItems: (state) => {
       return state.cart.map(item => ({
@@ -213,9 +222,12 @@ export default createStore({
       }))
     },
 
+    // Liste des favoris
     favorites: (state) => {
       return state.favorites
     },
+
+   // Produits favoris avec informations additionnelles
 
     favoriteProducts: (state) => {
       return state.favorites.map(favorite => {
@@ -231,15 +243,18 @@ export default createStore({
         }
       }).filter(Boolean)
     },
+// Produits filtrés selon les critères
 
     filteredProducts: (state) => {
       let result = [...state.products]
+     // Filtre par catégorie
 
       if (state.filters.category) {
         result = result.filter(product => 
           product.category === state.filters.category
         )
       }
+     // Filtre par prix
 
       if (state.filters.price) {
         result = result.filter(product => {
@@ -248,6 +263,7 @@ export default createStore({
           return avgPrice <= parseFloat(state.filters.price)
         })
       }
+// Tri par prix
 
       if (state.filters.sort) {
         result.sort((a, b) => {
@@ -263,7 +279,9 @@ export default createStore({
     }
   },
 
+   // Mutations pour modifier l'état
   mutations: {
+     // Ajouter au panier
     ADD_TO_CART(state, { product, selectedSize, quantity }) {
       const existingItem = state.cart.find(item => 
         item.id === product.id && item.selectedSize === selectedSize
@@ -283,6 +301,7 @@ export default createStore({
       localStorage.setItem('cart', JSON.stringify(state.cart))
     },
 
+ // Retirer du panier
     REMOVE_FROM_CART(state, { id, selectedSize }) {
       state.cart = state.cart.filter(item => 
         !(item.id === id && item.selectedSize === selectedSize)
@@ -290,6 +309,7 @@ export default createStore({
       localStorage.setItem('cart', JSON.stringify(state.cart))
     },
 
+ // Mettre à jour la quantité
     UPDATE_CART_QUANTITY(state, { id, selectedSize, quantity }) {
       const item = state.cart.find(item => 
         item.id === id && item.selectedSize === selectedSize
@@ -307,6 +327,8 @@ export default createStore({
       }
     },
 
+    // Gérer les favoris
+
     TOGGLE_FAVORITE_WITH_SIZE(state, favorite) {
       const existingIndex = state.favorites.findIndex(
         f => f.productId === favorite.productId
@@ -320,16 +342,20 @@ export default createStore({
 
       localStorage.setItem('favorites', JSON.stringify(state.favorites))
     },
-
+  // Mise à jour des filtres
     UPDATE_FILTERS(state, filters) {
       state.filters = { ...state.filters, ...filters }
     },
+
+   // Vider le panier
 
     CLEAR_CART(state) {
       state.cart = []
       localStorage.removeItem('cart')
     }
   },
+  
+ // Actions pour déclencher les mutations
 
   actions: {
     addToCart({ commit }, payload) {

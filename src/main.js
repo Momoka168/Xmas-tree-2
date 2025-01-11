@@ -1,3 +1,9 @@
+// main.js
+/* 
+* Point d'entrée principal de l'application
+* Configuration de Vue.js et des plugins
+*/
+
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'

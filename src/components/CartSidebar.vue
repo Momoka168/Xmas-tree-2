@@ -1,36 +1,38 @@
 <template>
+  <!-- Overlay principal du panier avec gestion de flou d'arrière-plan et fermeture -->
   <div class="cart-sidebar-overlay" v-if="isOpen" @click="handleOverlayClick">
     <div class="cart-sidebar" :class="{ 'is-open': isOpen }" @click.stop>
-      <!-- En-tête du panier -->
+      
+      <!-- En-tête avec titre et bouton de fermeture -->
       <div class="cart-header">
         <h2>Mon Panier</h2>
         <button class="close-btn" @click="$emit('close')">
           <i class="fas fa-times"></i>
         </button>
       </div>
-
-      <!-- Contenu du panier -->
+ 
+      <!-- Contenu principal du panier avec gestion des articles -->
       <div v-if="cartItems.length > 0" class="cart-content">
-        <!-- Liste des produits -->
+        <!-- Liste déroulante des articles du panier -->
         <div class="cart-items-container">
           <div v-for="item in cartItems" 
                :key="`${item.id}-${item.selectedSize}`" 
                class="cart-item">
-            <!-- Image du produit -->
+            <!-- Image et détails de l'article -->
             <div class="item-col item-image">
               <img :src="item.image" :alt="item.name">
             </div>
-
-            <!-- Informations du produit -->
+ 
             <div class="item-col item-details">
+              <!-- En-tête avec nom et bouton suppression -->
               <div class="item-header">
                 <h3>{{ item.name }}</h3>
                 <button class="delete-btn" @click="handleRemoveFromCart(item.id, item.selectedSize)">
                   <i class="fas fa-trash-alt"></i>
                 </button>
               </div>
-
-              <!-- Taille -->
+ 
+              <!-- Gestion de la taille avec modal de modification -->
               <div class="size-info">
                 <span class="label">Taille :</span>
                 <button class="size-btn" @click="openSizeModal(item)">
@@ -38,8 +40,8 @@
                   <i class="fas fa-pencil-alt"></i>
                 </button>
               </div>
-
-              <!-- Contrôles de quantité -->
+ 
+              <!-- Contrôles de quantité avec gestion du stock -->
               <div class="quantity-controls">
                 <span class="label">Quantité :</span>
                 <div class="quantity-actions">
@@ -62,21 +64,20 @@
                   </button>
                 </div>
               </div>
-
-              <!-- Message de stock -->
+ 
+              <!-- Alerte stock limité -->
               <p v-if="item.quantity >= getStockDisponible(item)" class="stock-warning">
                 Stock limité à {{ getStockDisponible(item) }} {{ getStockDisponible(item) <= 1 ? 'unité' : 'unités' }}
               </p>
-
-              <!-- Prix -->
+ 
               <div class="price">
                 <span>{{ item.prices[item.selectedSize] }}€</span>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Information livraison -->
+ 
+        <!-- Bannière de livraison gratuite avec calcul dynamique -->
         <div class="shipping-banner" :class="{ 'is-free': cartTotal >= 300 }">
           <i :class="cartTotal >= 300 ? 'fas fa-truck' : 'fas fa-info-circle'"></i>
           <p v-if="cartTotal < 300">
@@ -86,8 +87,8 @@
             Félicitations ! Vous bénéficiez de la livraison gratuite
           </p>
         </div>
-
-        <!-- Résumé et actions -->
+ 
+        <!-- Résumé de commande avec calculs -->
         <div class="cart-summary">
           <div class="summary-row">
             <span>Sous-total</span>
@@ -101,7 +102,8 @@
             <span>Total</span>
             <span class="total-price">{{ cartTotal }}€</span>
           </div>
-
+ 
+          <!-- Boutons d'action -->
           <div class="cart-actions">
             <button class="checkout-btn" @click="handleCheckout">
               <span>Passer la commande</span>
@@ -114,8 +116,8 @@
           </div>
         </div>
       </div>
-
-      <!-- Panier vide -->
+ 
+      <!-- Affichage panier vide -->
       <div v-else class="empty-cart">
         <i class="fas fa-shopping-cart"></i>
         <p>Votre panier est vide</p>
@@ -123,8 +125,8 @@
           Commencer mes achats
         </button>
       </div>
-
-      <!-- Modal changement de taille -->
+ 
+      <!-- Modal de modification de taille -->
       <div v-if="showSizeModal" class="size-modal-overlay">
         <div class="size-modal">
           <div class="modal-header">
@@ -145,7 +147,7 @@
               {{ height }}
             </button>
           </div>
-
+ 
           <div class="modal-actions">
             <button class="confirm-btn" @click="confirmSizeChange">
               Confirmer
@@ -158,44 +160,50 @@
       </div>
     </div>
   </div>
-</template>
-
-<script setup>
-import { ref, computed } from 'vue'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import { useCart } from '@/composables/useCart'
-
-const props = defineProps({
+ </template>
+ 
+ <script setup>
+ 
+ // Imports nécessaires pour la gestion du panier
+ import { ref, computed } from 'vue'
+ import { useStore } from 'vuex'
+ import { useRouter } from 'vue-router'
+ import { useCart } from '@/composables/useCart'
+ 
+ const props = defineProps({
   isOpen: Boolean
-})
-
-const emit = defineEmits(['close'])
-const store = useStore()
-const router = useRouter()
-const { removeFromCart } = useCart()
-
-const showSizeModal = ref(false)
-const selectedItem = ref(null)
-const selectedSize = ref(null)
-
-// Gestion des stocks
-const generateRandomStock = () => Math.floor(Math.random() * 5) + 0
-
-const stocksParTaille = ref({
+ })
+ 
+ const emit = defineEmits(['close'])
+ const store = useStore()
+ const router = useRouter()
+ const { removeFromCart } = useCart()
+ 
+ // États pour la gestion du modal de taille
+ const showSizeModal = ref(false)
+ const selectedItem = ref(null)
+ const selectedSize = ref(null)
+ 
+ // Simulation de gestion des stocks
+ const generateRandomStock = () => Math.floor(Math.random() * 5) + 0
+ 
+ const stocksParTaille = ref({
   'Petit': generateRandomStock(),
   'Moyen': generateRandomStock(),
   'Grand': generateRandomStock()
-})
-
-const cartItems = computed(() => store.getters.cartItems)
-const cartTotal = computed(() => store.getters.cartTotal)
-
-const getStockDisponible = (item) => {
+ })
+ 
+ // Getters pour les calculs du panier
+ const cartItems = computed(() => store.getters.cartItems)
+ const cartTotal = computed(() => store.getters.cartTotal)
+ 
+ // Méthodes de gestion du stock
+ const getStockDisponible = (item) => {
   return stocksParTaille.value[item.selectedSize] || 0
-}
-
-const decrementQuantity = (item) => {
+ }
+ 
+ // Méthodes de modification des quantités
+ const decrementQuantity = (item) => {
   if (item.quantity > 1) {
     store.dispatch('updateCartQuantity', {
       id: item.id,
@@ -203,9 +211,9 @@ const decrementQuantity = (item) => {
       quantity: item.quantity - 1
     })
   }
-}
-
-const incrementQuantity = (item) => {
+ }
+ 
+ const incrementQuantity = (item) => {
   const stockDispo = getStockDisponible(item)
   if (item.quantity < stockDispo) {
     store.dispatch('updateCartQuantity', {
@@ -214,38 +222,41 @@ const incrementQuantity = (item) => {
       quantity: item.quantity + 1
     })
   }
-}
-
-const handleOverlayClick = () => {
+ }
+ 
+ // Gestion des interactions utilisateur
+ const handleOverlayClick = () => {
   emit('close')
-}
-
-const handleRemoveFromCart = (id, selectedSize) => {
+ }
+ 
+ const handleRemoveFromCart = (id, selectedSize) => {
   removeFromCart({ id, selectedSize })
-}
-
-const handleCheckout = () => {
+ }
+ 
+ const handleCheckout = () => {
   emit('close')
   router.push('/checkout')
-}
-
-const openSizeModal = (item) => {
+ }
+ 
+ // Gestion du modal de changement de taille
+ const openSizeModal = (item) => {
   selectedItem.value = item
   selectedSize.value = item.selectedSize
   showSizeModal.value = true
-}
-
-const closeSizeModal = () => {
+ }
+ 
+ const closeSizeModal = () => {
   showSizeModal.value = false
   selectedItem.value = null
   selectedSize.value = null
-}
-
-const changeSize = (size) => {
+ }
+ 
+ const changeSize = (size) => {
   selectedSize.value = size
-}
-
-const confirmSizeChange = () => {
+ }
+ 
+ // Logique de changement de taille avec préservation de la quantité
+ const confirmSizeChange = () => {
   if (selectedItem.value && selectedSize.value) {
     const oldSize = selectedItem.value.selectedSize
     const quantity = selectedItem.value.quantity
@@ -263,10 +274,12 @@ const confirmSizeChange = () => {
     
     closeSizeModal()
   }
-}
-</script>
+ }
+ </script>
+ 
+ 
 <style scoped>
-/* Base et overlay */
+
 .cart-sidebar-overlay {
   position: fixed;
   top: 0;

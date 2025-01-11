@@ -49,6 +49,7 @@ const slides = ref([
 const currentSlide = ref(0)
 let intervalId = null
 
+// 2 Rotation automatique des images toutes les 5 secondes
 const nextSlide = () => {
   currentSlide.value = (currentSlide.value + 1) % slides.value.length
 }
@@ -64,7 +65,8 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .hero-banner {
-  height: 600px;
+  height: 100vh; 
+  margin-top: 0; 
   position: relative;
   overflow: hidden;
 }
